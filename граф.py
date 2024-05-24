@@ -24,13 +24,7 @@ def find_max_independent_set(graph, current_set, current_vertex):
   find_max_independent_set(graph, current_set, current_vertex + 1)
 
 # матрица смежности
-#graph = [[0, 1, 0, 1, 1, 0, 0],
- #        [1, 0, 1, 0, 1, 1, 0],
-     #    [0, 1, 0, 0, 0, 1, 0],
-     #    [1, 0, 0, 0, 0, 0, 0],
-     #    [1, 1, 0, 0, 0, 1, 0],
-      #   [0, 1, 1, 0, 1, 0, 1],
-      #   [0, 0, 0, 0, 0, 1, 0],]
+
 
 
 graph = [[0,1,0,0,0], # Пример 
@@ -44,7 +38,7 @@ Nrows = int(input('Количество строк: '))
 Ncols = int(input("Количество столбцов: "))
 matrix = [[0 for j in range(Ncols)] for i in range(Nrows)]
 
-# Заполнить массив значениями, введенными пользователем
+# 
 for i in range(Nrows):
     for j in range(Ncols):
         value = int(input(f"Введите значение для элемента [{i}][{j}]: "))
