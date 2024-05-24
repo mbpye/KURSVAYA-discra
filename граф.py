@@ -33,16 +33,25 @@ def find_max_independent_set(graph, current_set, current_vertex):
       #   [0, 0, 0, 0, 0, 1, 0],]
 
 
-graph = [[0,1,0,0,0],
+graph = [[0,1,0,0,0], # Пример 
          [1,0,1,1,0],
          [0,1,0,1,1],
          [0,1,1,0,0],
          [0,0,1,0,0]]
 
-H=[]
-#Nlines = input('Raws num: ')
-#for k in range(Nlines):
-    #graph.append(H=input('line - ', k,': '))
+h=[]
+Nrows = int(input('Количество строк: '))
+Ncols = int(input("Количество столбцов: "))
+matrix = [[0 for j in range(Ncols)] for i in range(Nrows)]
+
+# Заполнить массив значениями, введенными пользователем
+for i in range(Nrows):
+    for j in range(Ncols):
+        value = int(input(f"Введите значение для элемента [{i}][{j}]: "))
+        matrix[i][j] = value
+print(matrix)
+
+graph = matrix
 
 max_independent_set = set()
 find_max_independent_set(graph, set(), 0)
