@@ -1,71 +1,82 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np 
+import numpy as np
 
-def find_max_independent_set(graph, current_set, current_vertex):
-  global max_independent_set
-  if current_vertex == len(graph):  #ужэе к крнцу  графа
-    if len(current_set) > len(max_independent_set):
-      max_independent_set = set(current_set)
-    return
+def find_max_independent_sets(graph):
+    max_independent_sets = []
+    max_size = 0
 
-  # Тут типо проверочка является ли текущая вершина независимой
-  is_independent = True
-  for vertex in current_set:
-    if graph[current_vertex][vertex] == 1:
-      is_independent = False
-      break
+    def dfs(current_set, current_vertex):
+        nonlocal max_independent_sets, max_size
+        if current_vertex == len(graph):
+            if len(current_set) > max_size:
+                max_size = len(current_set)
+                max_independent_sets = [set(current_set)]
+            elif len(current_set) == max_size:
+                max_independent_sets.append(set(current_set))
+            return
 
-  if is_independent:
-    #  вершину в множество
-    new_set = set(current_set)
-    new_set.add(current_vertex)
-    find_max_independent_set(graph, new_set, current_vertex + 1)
-  find_max_independent_set(graph, current_set, current_vertex + 1)
+        is_independent = True
+        for vertex in current_set:
+            if graph[vertex][current_vertex] == 1:
+                is_independent = False
+                break
 
-# матрица смежности
+        if is_independent:
+            new_set = set(current_set)
+            new_set.add(current_vertex)
+            dfs(new_set, current_vertex + 1)
+        dfs(current_set, current_vertex + 1)
+
+    dfs(set(), 0)
+    return max_independent_sets
 
 
+matrix = []
 
-graph = [[0,1,0,0,0], # Пример 
-         [1,0,1,1,0],
-         [0,1,0,1,1],
-         [0,1,1,0,0],
-         [0,0,1,0,0]]
+def write_digits_to_array():
+    user_input = input("Введи размерность матрицы смежности: ")
+    digits_array = []
+    
+    for digit in user_input:
+        if digit.isdigit():
+            digits_array.append(int(digit))
+    
+    print("Digits array:", digits_array)
+    return digits_array
 
-h=[]
-Nrows = int(input('Количество строк: '))
-Ncols = int(input("Количество столбцов: "))
-matrix = [[0 for j in range(Ncols)] for i in range(Nrows)]
+o = input("Enter the size of the adjacency matrix: ")
+for i in range(int(o)): 
+  matrix.append(write_digits_to_array())
 
-# 
-for i in range(Nrows):
-    for j in range(Ncols):
-        value = int(input(f"Введите значение для элемента [{i}][{j}]: "))
-        matrix[i][j] = value
 print(matrix)
 
-graph = matrix
+graph = [[int(digit) for digit in user_input] for user_input in matrix]
 
-max_independent_set = set()
-find_max_independent_set(graph, set(), 0)
 
-# в визульн. граф =0
+# # Проверка
+# if not all(sum(row) == sum(col) for row, col in zip(graph, zip(*graph))):
+#     print("Граф ориентированный!")
+#     exit()
+
+
+max_independent_sets = find_max_independent_sets(graph)
+
 G = nx.from_numpy_array(np.array(graph))
 
-plt.figure(figsize=(10, 6))  
-
-# Создаем подграфики
-plt.subplot(1, 2, 1)  # 1 2, 3  первый подграфик
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
 nx.draw(G, with_labels=True, node_color='lightblue', node_size=500)
-plt.title("Граф")
+plt.title("Graph")
 
-plt.subplot(1, 2, 2)  # 1 2 3 второй подграфик
-plt.text(0.5, 0.5, f"Наибольшее независимое множество: {max_independent_set}\n\n"
-              f"Матрица смежности:\n\n"
-              f"{np.array(graph)}",
-         ha='center', va='center', fontsize=12)
+plt.subplot(1, 2, 2)
+text = "Max independent sets:\n\n"
+for i, max_set in enumerate(max_independent_sets):
+    text += f"Set {i+1}: {max_set}\n"
+text += f"\nМатрица смежности:\n\n{np.array(graph)}"
+
+plt.text(0.5, 0.5, text, ha='center', va='center', fontsize=12)
 plt.axis('off')
 
-plt.tight_layout()  # Подгоняем подграфики
+plt.tight_layout()
 plt.show()
