@@ -18,7 +18,7 @@ def find_max_independent_sets(graph):
 
         is_independent = True
         for vertex in current_set:
-            if graph[vertex][current_vertex] == 1:
+            if graph[vertex][current_vertex] == 1 or graph[current_vertex][vertex] == 1:
                 is_independent = False
                 break
 
@@ -35,7 +35,7 @@ def find_max_independent_sets(graph):
 matrix = []
 
 def write_digits_to_array():
-    user_input = input("Введи размерность матрицы смежности: ")
+    user_input = input("Введи строку: ")
     digits_array = []
     
     for digit in user_input:
@@ -45,7 +45,7 @@ def write_digits_to_array():
     print("Digits array:", digits_array)
     return digits_array
 
-o = input("Enter the size of the adjacency matrix: ")
+o = input("Введите размерность матрицы смежности: ")
 for i in range(int(o)): 
   matrix.append(write_digits_to_array())
 
@@ -54,10 +54,7 @@ print(matrix)
 graph = [[int(digit) for digit in user_input] for user_input in matrix]
 
 
-# # Проверка
-# if not all(sum(row) == sum(col) for row, col in zip(graph, zip(*graph))):
-#     print("Граф ориентированный!")
-#     exit()
+
 
 
 max_independent_sets = find_max_independent_sets(graph)
